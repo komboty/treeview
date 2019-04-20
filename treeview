@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		ul.tree li {
+		    list-style-type: none;
+		    position: relative;
+		}
+
+		ul.tree li ul {
+		    display: none;
+		}
+
+		ul.tree li.open > ul {
+		    display: block;
+		}
+
+		ul.tree li a {
+		    color: black;
+		    text-decoration: none;
+		}
+
+		ul.tree li a:before {
+		    height: 1em;
+		    font-size: .8em;
+		    display: block;
+		    position: absolute;
+		    left: -1.3em;
+		    top: .2em;
+		}
+
+		ul.tree li > a:not(:last-child):before {
+		    content: "\25B6";
+		}
+
+		ul.tree li.open > a:not(:last-child):before {
+		    -ms-transform: rotate(90deg); /* IE 9 */
+		    -webkit-transform: rotate(90deg); /* Safari */
+		    transform: rotate(90deg);
+		}
+	</style>
+</head>
+<body>
+
+<ul id="arbolCarpetas" class="tree" oncontextmenu="clickDerecho(event)">
+  <li><a href="#"><input type="checkbox">Part 1</a>
+    <ul>
+      <li><a href="#"><input type="checkbox">Item A</a>
+        <ul>
+          <li><a href="#"><input type="checkbox">Sub-item 1</a></li>
+          <li><a href="#"><input type="checkbox">Item A</a>
+	        <ul>
+	          <li><a href="#"><input type="checkbox">Sub-item 1</a></li>
+	          <li><a href="#"><input type="checkbox">Sub-item 3</a></li>
+	        </ul>
+          <li><a href="#"><input type="checkbox">Sub-item 2</a></li>
+          <li><a href="#"><input type="checkbox">Sub-item 3</a></li>
+        </ul>
+      </li>      
+    </ul>
+  </li>
+
+  <li><a href="#"><input type="checkbox">Part 2</a>
+    <ul>      
+      <li><a href="#"><input type="checkbox">Item D</a>
+        <ul>
+          <li><a href="#"><input type="checkbox">Sub-item 1</a></li>
+          <li><a href="#"><input type="checkbox">Sub-item 3</a></li>
+        </ul>
+      </li>
+      <li><a href="#"><input type="checkbox">Item E</a>
+        <ul>
+          <li><a href="#"><input type="checkbox">Sub-item 1</a></li>
+          <li><a href="#"><input type="checkbox">Sub-item 2</a></li>
+          <li><a href="#"><input type="checkbox">Sub-item 3</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<script type="text/javascript">
+	var padres = document.querySelectorAll('ul.tree a:not(:last-child)')
+
+	for (var i = 0; i < padres.length; i++) {
+	    padres[i].addEventListener('click', function(e) {
+	    	var elemento = e.target
+
+	    	if (elemento.tagName === "A") {
+		        elemento.parentElement.classList.toggle("open")
+		        e.preventDefault()
+		    }
+	    });
+	}
+  
+	function clickDerecho(e) {
+		e.preventDefault()
+		
+		var i;
+		var checkbox = e.target
+		var padre = checkbox.offsetParent
+		var seleccion = !checkbox.checked
+		var hijosCheck = padre.querySelectorAll('input[type="checkbox"]')
+		var hijosPadre = padre.querySelectorAll('li')
+
+		// Se abre cuendo se va a poner checked, si no se cierra.
+		if (seleccion) {
+			padre.classList.add("open")
+			for (i = 0; i < hijosPadre.length; i++) { 
+				hijosPadre[i].classList.add("open")
+			}
+		} else {
+			padre.classList.remove("open")
+		}
+
+		// Se hace checked a todos los hijos.
+		for (i = 0; i < hijosCheck.length; i++) { 
+			hijosCheck[i].checked = seleccion			
+		}
+	}	
+</script>
+</body>
+</html>
